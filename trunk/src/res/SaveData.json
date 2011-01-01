@@ -1,0 +1,11 @@
+{
+	"inventory" : {
+		"agents" : [
+			{"name" : "Hack", "quantity" : 2},
+			{"name" : "Iron", "quantity" : 1}
+		]
+	},
+	"defeated" : [
+		0
+	]
+}
