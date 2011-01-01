@@ -1,0 +1,68 @@
+[
+	{
+		"name" : "Hack",
+		"desc" : "Quick dirty method for gaining access to nodes",
+		"color" : "44bdcb",
+		"thumb" : "AgentHack.png",
+		"size" : 4,
+		"move" : 2,
+		"abilities" : [
+			{
+				"source" : "BasicAttack", 
+				"params" : {
+					"name" : "Cut",
+					"desc" : "Hack's attack\nDamage: 3",
+					"damage" : 2,
+					"range" : 1
+				}
+			}
+		]
+	},
+	{
+		"name" : "Iron",
+		"desc" : "Reliable tool for attack when you have physical access to a node",
+		"color" : "b59515",
+		"thumb" : "AgentIron.png",
+		"size" : 5,
+		"move" : 2,
+		"abilities" : [
+			{
+				"source" : "BasicAttack",
+				"params" : {
+					"name" : "Steam",
+					"desc" : "Iron's range attack\nRange: 2\nDamage: 2",
+					"damage" : 2,
+					"range" : 2
+				}
+			},
+			{
+				"source" : "BasicAttack",
+				"params" : {
+					"name" : "Flatten",
+					"desc" : "Iron's strong attack\nDamage: 4",
+					"damage" : 4,
+					"range" : 1
+				}
+			}
+		]
+	},
+	{
+		"name" : "Mutex",
+		"desc" : "Blocks access to critical nodes, basic node defense",
+		"color" : "008334",
+		"thumb" : "AgentMutex.png",
+		"size" : 4,
+		"move" : 2,
+		"abilities" : [
+			{
+				"source" : "BasicAttack",
+				"params" : {
+					"name" : "ConcurrencyBug",
+					"desc" : "He's all in ur systems allowin' ur race conditions\nDamage: 2",
+					"damage" : 2,
+					"range" : 1
+				}
+			}
+		]
+	}
+]

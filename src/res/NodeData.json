@@ -1,0 +1,23 @@
+{	
+	"nodes" : [
+		{
+			"id" : 0,
+			"name" : "Hacker HQ Mainframe",
+			"desc" : "Home base",
+			"image" : "NodeHQ.png",
+			"pos" : [ 0, 0 ],
+			"battle" : "BattleHQ"
+		},
+		{
+			"id" : 1,
+			"name" : "PharmHaus DataCenter 005609 NW",
+			"desc" : "PharmHaus data center reponsible for patient records",
+			"image" : "NodePharmHaus.png",
+			"pos" : [ 1, 1 ],
+			"battle" : "TestMap"
+		}
+	],
+	"links" : [
+		[ 0, 1 ]	
+	]
+}
