@@ -6,6 +6,7 @@ import util.UDim;
 
 import game.Agent.TurnState;
 import game.AgentInfo.Ability;
+import game.NodeMap.Node;
 import gui.WidgetRoot;
 import json.*;
 
@@ -48,14 +49,19 @@ public class GameSession {
 			for (JSNode nd : ((JSArray)userdata.get("defeated")).getChildren()) {
 				mNodeMap.getNodeById(nd.getIntValue()).setDefeated();
 			}
+			//having defeated node 0? Set it as visible
+			NodeMap.Node nd = mNodeMap.getNodeById(0);
+			if (nd.NStatus == Node.Status.Unknown) {
+				nd.NStatus = Node.Status.Visible;
+			}
 		} catch (Exception e) {
 			System.err.println("Failed to load game data because: " + e.getMessage());
 			e.printStackTrace();
 		} 
 	}
 	
-	public void enterDataBattle(DataBattleInfo info) {
-		DataBattle battle = new DataBattle(info);
+	public void enterDataBattle(DataBattleInfo info, NodeMap.Node nd) {
+		DataBattle battle = new DataBattle(info, nd);
 		//
 		Team myTeam = new Team();
 		myTeam.setColor(Color.blue);
@@ -84,6 +90,7 @@ public class GameSession {
 			mNodeMapView.setSize(new UDim(0, 0, 1, 1));
 			mNodeMapView.setParent(mGuiRoot);
 		}
+		mNodeMapView.enter();
 		mNodeMapView.setVisible(true);
 	}
 	

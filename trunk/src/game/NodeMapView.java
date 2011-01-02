@@ -2,7 +2,6 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 
 import game.NodeMap.Node.Status;
 import gui.*;
@@ -76,8 +75,10 @@ public class NodeMapView extends WidgetRect {
 			hideGui();
 		}
 		public void onClick(NodeMap.Node nd) {
-			mActionViewNodeStats.setState(nd);
-			setAction(mActionViewNodeStats);
+			if (nd.NStatus != NodeMap.Node.Status.Unknown) {
+				mActionViewNodeStats.setState(nd);
+				setAction(mActionViewNodeStats);
+			}
 		}
 		public void showGui() {
 			mWidget.setVisible(true);
@@ -174,7 +175,7 @@ public class NodeMapView extends WidgetRect {
 		}
 		public void enterBattle() {
 			NodeMapView.this.setVisible(false);
-			mGame.enterDataBattle(mTargetNode.DataBattle);
+			mGame.enterDataBattle(mTargetNode.DataBattle, mTargetNode);
 		}
 		
 		private NodeMap.Node mTargetNode;
@@ -264,6 +265,10 @@ public class NodeMapView extends WidgetRect {
 				break;
 			}
 		}
+	}
+	
+	public void enter() {
+		setAction(mActionPanOrSelectNode);
 	}
 	
 	private void setAction(IAction act) {

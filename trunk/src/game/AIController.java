@@ -27,6 +27,23 @@ public class AIController {
 		public int GScore;
 		public int FScore;
 		public int HScore;
+		
+//		//floodpaths stuff
+//		public Tile CameFrom; //tile came from
+//		public boolean Reachable; //can it be reached
+//		public int MoveLeft;	//move it takes to get there
+//		public int RangeLeft;	//range it takes to get there after moving
+//		public boolean IsMove;
+//		
+//		public boolean betterMove(Tile other) {
+//			if (MoveLeft < other.MoveLeft) {
+//				return true;
+//			} else if (MoveLeft == other.MoveLeft) {
+//				return RangeLeft < other.RangeLeft;
+//			} else {
+//				return false;
+//			}
+//		}
 	}
 	
 	public static class Path {
@@ -36,6 +53,7 @@ public class AIController {
 			public int RangeToGoal;
 		}
 		public Node Start;
+		public Node End;
 		public int Move = 0;
 		public int Range = 0;
 	}
@@ -65,6 +83,7 @@ public class AIController {
 				mtl.Filled = tl.Filled;
 				mtl.Agent = tl.Agent;
 				mtl.Flood = false;
+				//mtl.Reachable = false;
 			}
 		}
 	}
@@ -82,6 +101,14 @@ public class AIController {
 	}
 	
 	public Path Astar(Tile start, Tile goal, int range) {
+		//short cicuit, goal is end
+		if (start == goal) {
+			Path path = new Path();
+			path.Move = 0;
+			path.Range = 0;
+			return path;
+		}
+		
 		//get rid of previous info, update internal representation
 		clean();
 		LinkedList<Tile> open = new LinkedList<Tile>();
@@ -103,6 +130,7 @@ public class AIController {
 				path.Move = 0;
 				path.Range = 0;
 				Path.Node curnd = new Path.Node();
+				path.End = curnd;
 				curnd.Tile = goal;
 				Tile curtl = goal;
 				if (curtl.IsMove)
@@ -166,6 +194,65 @@ public class AIController {
 		}
 		return null;
 	}
+	
+//	private void floodRangesInternal(Tile from, Tile tl, int rangel) {
+//		//no tile? / Tile is origin? return
+//		if (tl == null || (tl.Flood && tl.CameFrom == null)) return;
+//		
+//		//better path here?
+//		if (tl.Flood && (tl.MoveLeft > 0 || tl.RangeLeft > rangel))
+//			return;
+//		
+//		//put stats here
+//		tl.MoveLeft = 0;
+//		tl.RangeLeft = rangel;
+//		tl.CameFrom = from;
+//		tl.Flood = true;
+//		tl.IsMove = false;
+//		
+//		//reachable?
+//		tl.Reachable = (rangel >= 0);
+//		
+//		//adjacent
+//		for (Vec v : Vec.getDirs()) {
+//			floodRangesInternal(tl, getTile(tl.Pos.add(v)), rangel-1);
+//		}
+//	}
+//	
+//	private void floodPathsInternal(Agent a, Tile from, Tile tl, int movel, int rangel) {
+//		//no tile? / Tile is origin? return
+//		if (tl == null || (tl.Flood && tl.CameFrom == null)) return;
+//		
+//		//agent here? / movel < 0? pass it to floorRangesInternal and return
+//		if ((tl.Agent != null && tl.Agent != a) || movel < 0 || !tl.Filled) {
+//			floodRangesInternal(from, tl, rangel);
+//			return;
+//		}
+//		
+//		//better path here? return
+//		if (tl.Flood && (tl.MoveLeft > movel))
+//			return;
+//		
+//		//put stats there
+//		tl.MoveLeft = movel;
+//		tl.RangeLeft = rangel;
+//		tl.CameFrom = from;
+//		tl.Flood = true;
+//		tl.IsMove = true;
+//		
+//		//reachable?
+//		tl.Reachable = (movel >= 0);
+//		
+//		//adjacent
+//		for (Vec dir : Vec.getDirs()) {
+//			floodPathsInternal(a, tl, getTile(tl.Pos.add(dir)), movel-1, rangel);
+//		}
+//	}
+	
+//	public void floodPaths(Tile start, int move, int range) {
+//		clean();
+//		floodPathsInternal(start.Agent, null, start, move, range);
+//	}
 	
 	public Tile getTile(int x, int y) {
 		if (x >= 0 && x < mW && y >= 0 && y < mH) {

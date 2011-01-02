@@ -14,10 +14,19 @@
 			"desc" : "PharmHaus data center reponsible for patient records",
 			"image" : "NodePharmHaus.png",
 			"pos" : [ 1, 1 ],
-			"battle" : "TestMap"
+			"battle" : "Map1"
+		},
+		{
+			"id" : 2,
+			"name" : "PharmHaus AI",
+			"desc" : "PharmHaus AI logic processing units",
+			"image" : "NodePharmHaus.png",
+			"pos" : [ 1, -1 ],
+			"battle" : "Map2"
 		}
 	],
 	"links" : [
-		[ 0, 1 ]	
+		[ 0, 1 ],
+		[ 1, 2 ]	
 	]
 }

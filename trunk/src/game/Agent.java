@@ -25,6 +25,7 @@ public class Agent {
 	}
 	
 	public void move(Vec targetsq) {
+		assert targetsq != getPos(): "Attempt to move to current position";
 		mBoard.onAgentMove.fire();
 		mAmountMoved++;
 		DataBattle.Tile tl = mBoard.getTile(targetsq);

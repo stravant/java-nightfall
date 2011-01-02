@@ -148,7 +148,7 @@ public abstract class JSNode {
 				}
 			}
 			return new JSString(str);
-		} else if (Character.isDigit(c)) {
+		} else if (Character.isDigit(c) || c == '-') {
 			String num = "" + c;
 			num += readDigits(in);
 			in.mark(2);

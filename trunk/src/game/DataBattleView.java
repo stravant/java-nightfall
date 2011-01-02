@@ -8,13 +8,11 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.prefs.BackingStoreException;
 
 import util.*;
 import game.AgentInfo.Ability;
 import game.DataBattle.ListenerAgentDamage;
 import game.DataBattle.TileOverlay;
-import game.Inventory.InventoryEntry;
 import gui.*;
 import gui.WidgetText.TextAlign;
 
@@ -359,6 +357,68 @@ public class DataBattleView extends Widget {
 	
 	/***************************************/
 	/***************************************/
+	/***************************************/		
+	public class ActionWinLoss implements IAction {
+		public ActionWinLoss() {
+			mWidget = new WidgetRect();
+			mWidget.setColor(CONTENT_COLOR);
+			mWidget.setSize(new UDim(400, 200));
+			mWidget.setPos(new UDim(-200, -100, 0.5f, 0.5f));
+			mWidget.setParent(DataBattleView.this);
+			mWidget.setVisible(false);
+			mWidget.onMouseDown.connect(new MouseEvent.Listener() {
+				public void onMouseEvent(MouseEvent e) {
+					//get outa here!
+					DataBattleView.this.setParent(null);
+					DataBattleView.this.setVisible(false);
+					mGame.enterNodeMap();
+				}
+			});
+			//
+			CutoffCornerWidget top = new CutoffCornerWidget(1, 1, 0, 0);
+			top.setSize(new UDim(0, 20, 1, 0));
+			top.setPos(new UDim(0, -20));
+			top.setColor(HEADER_COLOR);
+			top.setParent(mWidget);
+			//
+			CutoffCornerWidget bottom = new CutoffCornerWidget(0, 0, 1, 1);
+			bottom.setSize(new UDim(0, 20, 1, 0));
+			bottom.setPos(new UDim(0, 0, 0, 1));
+			bottom.setColor(HEADER_COLOR);
+			bottom.setParent(mWidget);
+			//
+			mMessageWidget = new WidgetText();
+			mMessageWidget.setSize(new UDim(0, 0, 1, 1));
+			mMessageWidget.setBackground(false);
+			mMessageWidget.setTextColor(CONTENT_TEXT_COLOR);
+			mMessageWidget.setParent(mWidget);
+			mMessageWidget.setActive(false);
+		}
+		
+		public void onActivate() {
+			mMessageWidget.setText(mMessage);
+			mWidget.setVisible(true);
+		}
+		
+		public void onDeactivate() {
+			
+		}
+		
+		public void onClick(Vec pos, DataBattle.Tile target) {
+			
+		}
+		
+		public void setState(String msg) {
+			mMessage = msg;
+		}
+		
+		private WidgetRect mWidget;
+		private WidgetText mMessageWidget;
+		private String mMessage;
+	}
+	
+	/***************************************/
+	/***************************************/
 	/***************************************/
 	private class ActionUseAbility implements IAction {
 		public ActionUseAbility() {
@@ -588,7 +648,10 @@ public class DataBattleView extends Widget {
 			starttext.setParent(mStartButton);
 			mStartButton.onMouseDown.connect(new MouseEvent.Listener() {
 				public void onMouseEvent(MouseEvent e) {
-					System.out.println("Starting game...");
+					//don't start if they have no units placed!
+					if (mTeam.getNumAgents() == 0)
+						return; //TODO: message
+					
 					//get rid of upload zones
 					for (int x = 0; x < mTarget.getSize().getX(); ++x) {
 						for (int y = 0; y < mTarget.getSize().getY(); ++y) {
@@ -888,6 +951,9 @@ public class DataBattleView extends Widget {
 		nextTurn.onMouseDown.connect(new MouseEvent.Listener() {
 			public void onMouseEvent(MouseEvent e) {
 				if (mGameStarted) {
+					//check for a win
+					checkForWin();
+					
 					mNextTurnButton.setVisible(false);
 					mCurrentAction = mActionSelectAgent;
 					mCurrentAction.onActivate();
@@ -912,6 +978,7 @@ public class DataBattleView extends Widget {
 		mActionMoveOrSelectAbility = new ActionMoveOrSelectAbility();
 		mActionSelectAgent = new ActionSelectAgent();	
 		mActionPlaceAgents = new ActionPlaceAgents();
+		mActionWinLoss = new ActionWinLoss();
 		setAction(mActionPlaceAgents);
 	}
 	
@@ -932,6 +999,29 @@ public class DataBattleView extends Widget {
 			mCurrentAction.onActivate();
 	}
 	
+	private void checkForWin() {
+		//loss
+		if (mTeam.getNumAgents() == 0) {
+			//loss
+			mActionWinLoss.setState("GAME OVER - YOU LOSE\n\nCLICK TO EXIT");
+			setAction(mActionWinLoss);
+		}
+		
+		//win
+		boolean foundUnit = false;
+		for (Team t : mTarget.getTeams()) {
+			if (t != mTeam && t.getNumAgents() > 0) {
+				foundUnit = true;
+				break;
+			}
+		}
+		if (!foundUnit) {
+			mActionWinLoss.setState("YOU WIN!\n\nCLICK TO EXIT");
+			mTarget.getTarget().setDefeated();
+			setAction(mActionWinLoss);
+		}
+	}
+	
 	private Team mTeam;
 	private DataBattle mTarget;
 	private GameSession mGame;
@@ -945,6 +1035,7 @@ public class DataBattleView extends Widget {
 	private ActionMoveOrSelectAbility mActionMoveOrSelectAbility;
 	private ActionSelectAgent mActionSelectAgent;
 	private ActionPlaceAgents mActionPlaceAgents;
+	private ActionWinLoss mActionWinLoss;
 	private IAction mCurrentAction;
 	
 	private ParticleHandler mParticleHandler = new ParticleHandler();
