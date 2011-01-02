@@ -34,5 +34,4 @@ public class TestApp extends CoreApplet {
 	WidgetRoot mGui;
 	//DataBattleView mView;
 	//AIController mAI;
-	AIStrategy mBasicAttackStrategy = new AIStrategy.BasicAttackAIStrategy();
 }

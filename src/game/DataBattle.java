@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.swing.text.html.MinimalHTMLWriter;
-
 import util.Vec;
 
 public class DataBattle {
@@ -85,7 +83,8 @@ public class DataBattle {
 	
 	///////////////// constructor ////////////////////
 	
-	public DataBattle(DataBattleInfo info) {
+	public DataBattle(DataBattleInfo info, NodeMap.Node nd) {
+		mTarget = nd;
 		mBoardSize = info.getBoardSize();
 		mBoard = new Tile[mBoardSize.getX()][mBoardSize.getY()];
 		for (int x = 0; x < mBoardSize.getX(); ++x) {
@@ -236,17 +235,23 @@ public class DataBattle {
 		mTeams.get(mTurn).onBeginTurn.fire();
 	}
 	
+	public NodeMap.Node getTarget() {
+		return mTarget;
+	}
+	
 	/////////////////// members //////////////////
 	
 	public final SignalAgentDamage onAgentDamage = new SignalAgentDamage();
 	public final SignalAgentMove onAgentMove = new SignalAgentMove();
 	public final SignalCreditCollect onCreditCollect = new SignalCreditCollect();
 	
-	private ArrayList<Team> mTeams = new ArrayList<Team>();
-	private ArrayList<Agent> mAgents = new ArrayList<Agent>();
+	private final NodeMap.Node mTarget;
+	
+	private final ArrayList<Team> mTeams = new ArrayList<Team>();
+	private final ArrayList<Agent> mAgents = new ArrayList<Agent>();
 	private int mTurn = 0;
 	private Vec mBoardSize;
-	private Tile[][] mBoard;
+	private final Tile[][] mBoard;
 }
 
 

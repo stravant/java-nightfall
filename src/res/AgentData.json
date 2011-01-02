@@ -64,5 +64,24 @@
 				}
 			}
 		]
+	},
+	{
+		"name" : "Monitor",
+		"desc" : "Monitors things",
+		"color" : "000000",
+		"thumb" : "AgentMonitor.png",
+		"size" : 3,
+		"move" : 2,
+		"abilities" : [
+			{
+				"source" : "BasicAttack",
+				"params" : {
+					"name" : "Observe",
+					"desc" : "Mostly harmless",
+					"damage" : 1,
+					"range" : 2
+				}
+			}
+		]
 	}
 ]

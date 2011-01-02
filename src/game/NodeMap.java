@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
